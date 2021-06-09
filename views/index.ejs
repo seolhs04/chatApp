@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
+    <title>Chat App</title>
+  </head>
+  <body>
+    <%- include('nav.html') %>
+    <h1>Chatting Service</h1>
+
+    <div class="card container" style="height: 300px; overflow-y: scroll;" id="chatList">
+        <div class="card container" style="max-width: 200px;">
+          This is some text within a card body.
+        </div>
+    </div>
+    <div class="input-group mb-3 container">
+        <input type="text" class="form-control" placeholder="메세지를 입력하세요" aria-label="Recipient's username" aria-describedby="button-addon2" id="textInput">
+        <button class="btn btn-primary" type="button" id="button-addon2">전송</button>
+    </div>
+
+    <!-- socket.io -->
+    <script src="https://cdn.socket.io/4.1.1/socket.io.min.js" integrity="sha384-cdrFIqe3RasCMNE0jeFG9xJHog/tgOVC1E9Lzve8LQN1g5WUHo0Kvk1mawWjxX7a" crossorigin="anonymous"></script>
+
+    <script>
+        var socket = io();
+
+        socket.on('alert', function(data){
+            var alertText = document.createElement('div');
+            alertText.setAttribute('class', 'card')
+            alertText.setAttribute('style', 'background-color:#adb5bd; text-align:center;')
+            alertText.innerText = data;
+            document.getElementById('chatList').append(alertText);
+        })
+
+        
+    </script>
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+  </body>
+</html>

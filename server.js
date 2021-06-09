@@ -12,7 +12,17 @@ app.use('/public', express.static('public'))
 app.set('view engine', 'ejs');
 
 app.get('/', function(req,res){
-    res.send('welcome chat service')
+    res.render('index.ejs')
+})
+
+io.on('connection', function(socket){
+    console.log('connected');
+
+    socket.emit('alert', '채팅에 연결되었습니다.')
+
+    socket.on('text', function(data){
+        console.log(data)
+    })
 })
 
 http.listen(PORT, function(){
