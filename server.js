@@ -15,13 +15,17 @@ app.get('/', function(req,res){
     res.render('index.ejs')
 })
 
+app.get('/chat', function(req,res){
+    res.render('chat.ejs')
+})
+
 io.on('connection', function(socket){
     console.log('connected');
 
     socket.emit('alert', '채팅에 연결되었습니다.')
 
     socket.on('text', function(data){
-        console.log(data)
+        io.emit('text', data);
     })
 })
 

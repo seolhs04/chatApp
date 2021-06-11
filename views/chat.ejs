@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
+    <title>Chat App</title>
+  </head>
+  <body>
+    <%- include('nav.html') %>
+    <h1>Chatting Service</h1>
+
+    <div class="card container" style="height: 300px; overflow-y: scroll;" id="chatList"></div>
+
+    <div class="input-group mb-3 container">
+      <input type="text" class="form-control" placeholder="메세지를 입력하세요" aria-label="Recipient's username" aria-describedby="button-addon2" id="textInput">
+      <button class="btn btn-primary" type="button" id="button-addon2">전송</button>
+    </div>
+
+    <!-- socket.io -->
+    <script src="https://cdn.socket.io/4.1.1/socket.io.min.js" integrity="sha384-cdrFIqe3RasCMNE0jeFG9xJHog/tgOVC1E9Lzve8LQN1g5WUHo0Kvk1mawWjxX7a" crossorigin="anonymous"></script>
+
+    <script>
+      // Chatting Connected
+      var socket = io();
+      const chatList = document.getElementById('chatList');
+
+      socket.on('alert', function(data){
+          var alertText = document.createElement('div');
+          alertText.setAttribute('class', 'card')
+          alertText.setAttribute('style', 'background-color:#adb5bd; text-align:center;')
+          alertText.innerText = data;
+          chatList.append(alertText);
+      })
+
+      // submit text
+      document.getElementById('button-addon2').onclick = function(){
+        socket.emit('text', document.getElementById('textInput').value)
+        document.getElementById('textInput').value = ''
+      }
+
+      // receive & view text
+      socket.on('text', function(data){
+        var chatText = document.createElement('div');
+        chatText.setAttribute('class', 'card container mt-1');
+        chatText.setAttribute('style', 'max-width: 250px; margin-left: 0;');
+        chatText.innerText = data;
+        chatList.append(chatText);
+        
+        // chatList Scroll controll
+        function moveScroll(){
+          var messages = chatList.childNodes
+          var offsetMessage = chatList.childNodes[messages.length - 1].offsetTop
+          chatList.scrollTo({top:offsetMessage, left:0, behavior:'smooth'});
+        }
+        moveScroll();
+      })
+
+      //Enterkey controll
+      document.getElementById('textInput').onkeypress = function(){
+        if(event.keyCode == 13){
+          if(document.getElementById('textInput').value != ''){
+            document.getElementById('button-addon2').click();
+          }
+        }
+      }
+    </script>
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+  </body>
+</html>
