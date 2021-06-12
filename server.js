@@ -19,6 +19,9 @@ app.get('/chat', function(req,res){
     res.render('chat.ejs')
 })
 
+
+
+
 io.on('connection', function(socket){
     console.log('connected');
 

@@ -21,6 +21,9 @@
       <button class="btn btn-primary" type="button" id="button-addon2">전송</button>
     </div>
 
+
+
+
     <!-- socket.io -->
     <script src="https://cdn.socket.io/4.1.1/socket.io.min.js" integrity="sha384-cdrFIqe3RasCMNE0jeFG9xJHog/tgOVC1E9Lzve8LQN1g5WUHo0Kvk1mawWjxX7a" crossorigin="anonymous"></script>
 
@@ -39,16 +42,22 @@
 
       // submit text
       document.getElementById('button-addon2').onclick = function(){
-        socket.emit('text', document.getElementById('textInput').value)
+        socket.emit('text', {name: localStorage.name, ip: localStorage.ip, article: document.getElementById('textInput').value})
         document.getElementById('textInput').value = ''
       }
 
       // receive & view text
       socket.on('text', function(data){
+        // name
+        var nameSpace = document.createElement('p');
+        nameSpace.setAttribute('style', 'margin-bottom: 0;');
+        nameSpace.innerText = data.name;
+        chatList.append(nameSpace)
+        // text
         var chatText = document.createElement('div');
         chatText.setAttribute('class', 'card container mt-1');
         chatText.setAttribute('style', 'max-width: 250px; margin-left: 0;');
-        chatText.innerText = data;
+        chatText.innerText = data.article;
         chatList.append(chatText);
         
         // chatList Scroll controll
