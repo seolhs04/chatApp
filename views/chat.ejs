@@ -41,6 +41,7 @@
       var socket = io();
       const chatList = document.getElementById('chatList');
 
+      
       socket.on('alert', function(data){
           socket.emit('user', {name: localStorage.name, socketId: socket.id});
           var alertText = document.createElement('div');
@@ -51,32 +52,22 @@
       })
 
       // receive User Array
-      var _user = [];
       socket.on('user', function(user){
-        _user = user
-        document.getElementById('userList').innerText = `접속 ${_user.length}`;
-        for(var i = 0; i < _user.length; i++){
+        // li초기화
+        var cell = document.getElementById("dropdown-menu");
+        while(cell.hasChildNodes()){
+          cell.removeChild( cell.firstChild );
+        }
+        document.getElementById('userList').innerText = `접속 ${user.length}`;
+          for(var i=0;i<user.length;i++){
           var user_li = document.createElement('li');
           document.getElementById('dropdown-menu').append(user_li)
           var user_a = document.createElement('a');
           user_a.setAttribute('class', 'dropdown-item');
-          user_a.innerText = _user[0].name;
+          user_a.innerText = user[i].name;
           user_li.append(user_a)
-        }
-      })  
-
-      // delete left user
-      socket.on('left', function(leftUser){
-        function findId(element){
-          if(element.socketId === leftUser.socketId){
-            return true 
-          }
-        }
-        var findUser = _user.find(findId);
-        var idxLeftUser = _user.indexOf(findUser)
-        _user.splice(idxLeftUser, 1);
-        
-      }) 
+        }  
+      })
 
       // submit text
       document.getElementById('button-addon2').onclick = function(){

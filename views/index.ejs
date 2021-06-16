@@ -19,7 +19,7 @@
       <div class="card-body">
         <h5 class="card-title">이름을 입력해 주세요</h5>
           <input type='text' id='nameInput' class="form-control mb-3" required='required'>
-          <a href='/chat' class='btn btn-primary' id='chatBtn'>채팅참여</a>
+          <a class='btn btn-primary' onclick="window.open('address','window_name','width=430,height=500,location=no,status=no,scrollbars=yes');" id='chatBtn'>채팅참여</a>
       </div>
     </div>
 
@@ -29,7 +29,11 @@
       // nameSetting
       document.getElementById('chatBtn').onclick = function(){
         var name = document.getElementById('nameInput').value;
-          localStorage.name = name;
+        if(name == ''){
+          alert('이름을 입력해주세요')
+        } else{
+          
+        }
       }
     </script>
 
