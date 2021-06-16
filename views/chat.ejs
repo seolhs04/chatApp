@@ -8,7 +8,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="public/index.css">
+    <link rel="stylesheet" href="public/styles/index.css">
 
     <title>Chat App</title>
   </head>
@@ -16,8 +16,14 @@
     <%- include('nav.html') %>
     <div>
       <div class="card container" style="height: 33rem; overflow-y: scroll;" id="chatList"></div>
-
       <div class="input-group container" style="padding: 0">
+        <div class="btn-group dropup">
+          <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" id="userList">
+            
+          </button>
+          <ul class="dropdown-menu" id="dropdown-menu">
+          </ul>
+        </div>
         <input type="text" class="form-control" placeholder="메세지를 입력하세요" aria-label="Recipient's username" aria-describedby="button-addon2" id="textInput">
         <button class="btn btn-dark" type="button" id="button-addon2">전송</button>
       </div>
@@ -36,12 +42,41 @@
       const chatList = document.getElementById('chatList');
 
       socket.on('alert', function(data){
+          socket.emit('user', {name: localStorage.name, socketId: socket.id});
           var alertText = document.createElement('div');
           alertText.setAttribute('class', 'card')
           alertText.setAttribute('style', 'background-color:#adb5bd; text-align:center; font-weight: bold')
           alertText.innerText = data;
           chatList.append(alertText);
       })
+
+      // receive User Array
+      var _user = [];
+      socket.on('user', function(user){
+        _user = user
+        document.getElementById('userList').innerText = `접속 ${_user.length}`;
+        for(var i = 0; i < _user.length; i++){
+          var user_li = document.createElement('li');
+          document.getElementById('dropdown-menu').append(user_li)
+          var user_a = document.createElement('a');
+          user_a.setAttribute('class', 'dropdown-item');
+          user_a.innerText = _user[0].name;
+          user_li.append(user_a)
+        }
+      })  
+
+      // delete left user
+      socket.on('left', function(leftUser){
+        function findId(element){
+          if(element.socketId === leftUser.socketId){
+            return true 
+          }
+        }
+        var findUser = _user.find(findId);
+        var idxLeftUser = _user.indexOf(findUser)
+        _user.splice(idxLeftUser, 1);
+        
+      }) 
 
       // submit text
       document.getElementById('button-addon2').onclick = function(){
@@ -51,6 +86,7 @@
           document.getElementById('textInput').focus();
         }
       }
+      
 
       // receive & view text
       socket.on('text', function(data){

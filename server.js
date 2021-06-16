@@ -4,6 +4,7 @@ const PORT = 8080;
 const ejs = require('ejs');
 const http = require('http').createServer(app);
 const { Server } = require('socket.io');
+const { disconnect } = require('process');
 const io = new Server(http);
 
 app.use(express.urlencoded({ extended:false }));
@@ -23,12 +24,28 @@ app.get('/chat', function(req,res){
 
 
 io.on('connection', function(socket){
-    console.log('connected');
-
+    console.log('connected')
     socket.emit('alert', '채팅에 연결되었습니다.')
+
+    var userArr = [];
+    socket.on('user', function(data){
+        userArr.push(data);
+        io.emit('user', userArr)
+    })
 
     socket.on('text', function(data){
         io.emit('text', data);
+    })
+
+    socket.on('disconnect', function(){
+        function findId(element){
+            if(element.socketId === socket.id){
+                return true
+            }
+        }
+        var leftUser = userArr.find(findId)
+        io.emit('left', leftUser)
+        console.log(leftUser)
     })
 })
 
