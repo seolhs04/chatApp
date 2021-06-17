@@ -19,7 +19,7 @@
       <div class="card-body">
         <h5 class="card-title">이름을 입력해 주세요</h5>
           <input type='text' id='nameInput' class="form-control mb-3" required='required'>
-          <a class='btn btn-primary' onclick="window.open('address','window_name','width=430,height=500,location=no,status=no,scrollbars=yes');" id='chatBtn'>채팅참여</a>
+          <a class='btn btn-primary' id='chatBtn'>채팅참여</a>
       </div>
     </div>
 
@@ -32,7 +32,8 @@
         if(name == ''){
           alert('이름을 입력해주세요')
         } else{
-          
+          localStorage.name = name;
+          window.open("/openchat", "PopupWin" ,"toolbar=no, scrollbars=no, width=500,height=600, location=no");
         }
       }
     </script>

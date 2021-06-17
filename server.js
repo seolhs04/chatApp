@@ -16,8 +16,8 @@ app.get('/', function(req,res){
     res.render('index.ejs')
 })
 
-app.get('/chat', function(req,res){
-    res.render('chat.ejs')
+app.get('/openchat', function(req,res){
+    res.render('openchat.ejs')
 })
 
 
