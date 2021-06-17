@@ -63,12 +63,8 @@ function moveScroll(){
     chatList.scrollTo({top:offsetMessage, left:0, behavior:'smooth'});
 }
 
-// 실험용
-
-
 // receive & view text
 socket.on('text', function(data){
-    
   // Compare SocketId
   if(socket.id == data.socketId){
     // name
@@ -83,7 +79,7 @@ socket.on('text', function(data){
     // time
     var timeText = document.createElement('span');
     timeText.setAttribute('style', 'font-size: 0.5rem; margin-left: auto; margin-bottom: 0px; margin-top: auto;');
-    timeText.innerText = dateOfhm(date)
+    timeText.innerText = `${date.getHours() < 10 ? `0${date.getHours()}`: date.getHours()}:${date.getMinutes() < 10 ? `0${date.getMinutes()}`: date.getMinutes()}`;
     textBox.append(timeText);
     // text
     var chatText = document.createElement('div');
@@ -110,9 +106,8 @@ socket.on('text', function(data){
     // time
     var timeText = document.createElement('span');
     timeText.setAttribute('style', 'font-size: 0.5rem; margin-right: auto; margin-top: auto;');
-    timeText.innerText = dateOfhm(date)
+    timeText.innerText = `${date.getHours() < 10 ? `0${date.getHours()}`: date.getHours()}:${date.getMinutes() < 10 ? `0${date.getMinutes()}`: date.getMinutes()}`;
     textBox.append(timeText);
   }
-
   moveScroll();
 })
