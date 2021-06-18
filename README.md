@@ -1,5 +1,6 @@
 https://chatapp-316605.du.r.appspot.com/
 
+![제목 없음](https://user-images.githubusercontent.com/77217916/122509941-a5e99d80-d03f-11eb-904c-bff837c4799f.png)
 
 
 Socket.io를 이용한 오픈채팅 웹 어플리케이션입니다.
